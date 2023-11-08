@@ -62,7 +62,6 @@ QWaylandLayeShellSurface::QWaylandLayeShellSurface(QtWayland::zwlr_layer_shell_v
         set_keyboard_interactivity(m_dlayerShellWindow->keyboardInteractivity());
     });
 
-
     QSize size = window->surfaceSize();
     const DLayerShellWindow::Anchors anchors = m_dlayerShellWindow->anchors();
     if ((anchors & DLayerShellWindow::AnchorLeft) && (anchors & DLayerShellWindow::AnchorRight)) {
@@ -73,7 +72,7 @@ QWaylandLayeShellSurface::QWaylandLayeShellSurface(QtWayland::zwlr_layer_shell_v
         size.setHeight(0);
     }
 
-    if (size.isValid() && !size.isEmpty()) {
+    if (size.isValid()) {
         set_size(size.width(), size.height());
     }
 }
