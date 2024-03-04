@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "globals.h"
 #include "abstractwindow.h"
 #include "desktopfileamparser.h"
 #include "desktopfileabstractparser.h"
@@ -15,11 +14,6 @@
 #include <QLoggingCategory>
 
 Q_LOGGING_CATEGORY(amdesktopfileLog, "dde.shell.dock.amdesktopfile")
-
-// AM static string
-static const QString AM_DBUS_PATH = "org.desktopspec.ApplicationManager1";
-static const QString DESKTOP_ENTRY_ICON_KEY = "Desktop Entry";
-static const QString DEFAULT_KEY = "default";
 
 static int pidfd_open(pid_t pid, uint flags)
 {
@@ -35,9 +29,6 @@ static QDBusServiceWatcher dbusWatcher(AM_DBUS_PATH, QDBusConnection::sessionBus
 DesktopFileAMParser::DesktopFileAMParser(QString id, QObject* parent)
     : DesktopfileAbstractParser(id, parent)
 {
-    auto ifc = QDBusConnection::sessionBus().interface();
-    m_amIsAvaliable = ifc->isServiceRegistered(AM_DBUS_PATH);
-
     connect(&dbusWatcher, &QDBusServiceWatcher::serviceRegistered, this, [this](){
         m_amIsAvaliable = true;
         Q_EMIT iconChanged();

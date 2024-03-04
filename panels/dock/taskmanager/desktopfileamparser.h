@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "globals.h"
 #include "dsglobal.h"
 #include "applicationinterface.h"
 #include "desktopfileparserfactory.h"
@@ -56,7 +57,8 @@ private Q_SLOTS:
     void onPropertyChanged(const QDBusMessage &msg);
 
 private:
-    inline static bool m_amIsAvaliable;
+    inline static bool m_amIsAvaliable = QDBusConnection::sessionBus().
+        interface()->isServiceRegistered(AM_DBUS_PATH);
 
     QString m_name;
     QString m_icon;

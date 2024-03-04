@@ -12,6 +12,11 @@
 DS_BEGIN_NAMESPACE
 namespace dock {
 
+// AM static string
+static const QString AM_DBUS_PATH = "org.desktopspec.ApplicationManager1";
+static const QString DESKTOP_ENTRY_ICON_KEY = "Desktop Entry";
+static const QString DEFAULT_KEY = "default";
+
 static inline const QString DOCK_ACTION_ALLWINDOW = "dock-action-allWindow";
 static inline const QString DOCK_ACTION_FORCEQUIT = "dock-action-forceQuit";
 static inline const QString DOCK_ACTION_CLOSEALL = "dock-action-closeAll";
