@@ -13,6 +13,7 @@ Q_LOGGING_CATEGORY(dockSettingsLog, "dde.shell.dock.docksettings")
 
 const static QString keyPosition                = "Position";
 const static QString keyHideMode                = "Hide_Mode";
+const static QString keyLockMode                = "Lock_Mode";
 const static QString keyDockSize                = "Dock_Size";
 const static QString keyItemAlignment           = "Item_Alignment";
 const static QString keyIndicatorStyle          = "Indicator_Style";
@@ -125,6 +126,7 @@ DockSettings::DockSettings(QObject* parent)
     : QObject(parent)
     , m_dockConfig(DConfig::create("org.deepin.ds.dock", "org.deepin.ds.dock", QString(), this))
     , m_writeTimer(new QTimer(this))
+    , m_lock(false)
     , m_dockSize(dock::DEFAULT_DOCK_SIZE)
     , m_hideMode(dock::KeepShowing)
     , m_dockPosition(dock::Bottom)
@@ -139,6 +141,7 @@ DockSettings::DockSettings(QObject* parent)
 void DockSettings::init()
 {
     if (m_dockConfig && m_dockConfig->isValid()) {
+        m_lock = m_dockConfig->value(keyLockMode).toBool();
         m_dockSize = m_dockConfig->value(keyDockSize).toUInt();
         m_hideMode = string2HideMode(m_dockConfig->value(keyHideMode).toString());
         m_dockPosition = string2Position(m_dockConfig->value(keyPosition).toString());
@@ -147,7 +150,12 @@ void DockSettings::init()
         m_pluginsVisible = m_dockConfig->value(keyPluginsVisible).toMap();
 
         connect(m_dockConfig.data(), &DConfig::valueChanged, this, [this](const QString& key){
-            if (keyDockSize == key) {
+            if (keyLockMode == key) {
+                auto lock = m_dockConfig->value(keyLockMode).toBool();
+                if (lock != m_lock) return;
+                m_lock = lock;
+                Q_EMIT lockModeChanged(m_lock);
+            } else if (keyDockSize == key) {
                 auto size = m_dockConfig->value(keyDockSize).toUInt();
                 if (size == m_dockSize || size > dock::MAX_DOCK_SIZE || size < dock::MIN_DOCK_SIZE) return;
                 m_dockSize = size;
@@ -252,6 +260,20 @@ void DockSettings::setIndicatorStyle(const IndicatorStyle& style)
     addWriteJob(indicatorStyleJob);
 }
 
+bool DockSettings::lockMode()
+{
+    return m_lock;
+}
+
+void DockSettings::setLockMode(bool lock)
+{
+    if (lock == m_lock) return;
+
+    m_lock = lock;
+    Q_EMIT lockModeChanged(m_lock);
+    addWriteJob(lockModeJob);
+}
+
 QVariantMap DockSettings::pluginsVisible()
 {
     return m_pluginsVisible;
@@ -315,6 +337,13 @@ void DockSettings::checkWriteJob()
     case indicatorStyleJob: {
         connect(m_writeTimer, &QTimer::timeout, this, [this](){
             m_dockConfig->setValue(keyIndicatorStyle, indicatorStyle2String(m_style));
+            checkWriteJob();
+        });
+        break;
+    }
+    case lockModeJob: {
+        connect(m_writeTimer, &QTimer::timeout, this, [this](){
+            m_dockConfig->setValue(keyLockMode, m_lock);
             checkWriteJob();
         });
         break;

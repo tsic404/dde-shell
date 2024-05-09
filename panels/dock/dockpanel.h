@@ -35,6 +35,7 @@ class DockPanel : public DS_NAMESPACE::DPanel, public QDBusContext
     Q_PROPERTY(ItemAlignment itemAlignment READ itemAlignment WRITE setItemAlignment NOTIFY itemAlignmentChanged FINAL)
     Q_PROPERTY(IndicatorStyle indicatorStyle READ indicatorStyle WRITE setIndicatorStyle NOTIFY indicatorStyleChanged FINAL)
 
+    Q_PROPERTY(bool lockMode READ lockMode WRITE setLockMode NOTIFY lockModeChanged FINAL)
     Q_PROPERTY(bool debugMode READ debugMode FINAL CONSTANT)
 
 public:
@@ -46,33 +47,35 @@ public:
     void ReloadPlugins();
     void callShow();
 
-    QRect geometry();
-    QRect frontendWindowRect();
+    QRect geometry() const;
+    QRect frontendWindowRect() const;
 
-    HideState hideState();
+    HideState hideState() const;
 
-    ColorTheme colorTheme();
+    ColorTheme colorTheme() const;
     void setColorTheme(const ColorTheme& theme);
 
-    uint dockSize();
+    uint dockSize() const;
     void setDockSize(const uint& size);
 
-    HideMode hideMode();
+    HideMode hideMode() const;
     void setHideMode(const HideMode& mode);
 
-    Position position();
+    Position position() const;
     void setPosition(const Position& position);
 
-    ItemAlignment itemAlignment();
+    ItemAlignment itemAlignment() const;
     void setItemAlignment(const ItemAlignment& alignment);
 
-    IndicatorStyle indicatorStyle();
+    IndicatorStyle indicatorStyle() const;
     void setIndicatorStyle(const IndicatorStyle& style);
 
     bool compositorReady();
     void setCompositorReady(bool ready);
 
     bool debugMode() const;
+    bool lockMode() const;
+    void setLockMode(bool lock);
 
     Q_INVOKABLE void openDockSettings() const;
     Q_INVOKABLE void setMouseGrabEnabled(QQuickItem *item, bool enabled);
@@ -93,6 +96,7 @@ Q_SIGNALS:
     void positionChanged(Position position);
     void itemAlignmentChanged(ItemAlignment alignment);
     void indicatorStyleChanged(IndicatorStyle style);
+    void lockModeChanged(bool lock);
 
 private:
     ColorTheme m_theme;

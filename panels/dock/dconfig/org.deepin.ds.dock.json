@@ -52,6 +52,16 @@
 			"permissions": "readwrite",
 			"visibility": "private"
 		},
+		"Lock_Mode": {
+			"value": false,
+			"serial": 0,
+			"flags": [],
+			"name": "LockMode",
+			"name[zh_CN]": "锁定状态",
+			"description": "",
+			"permissions": "readwrite",
+			"visibility": "private"
+		},
     "Plugins_Visible": {
 			"value": {},
 			"serial": 0,

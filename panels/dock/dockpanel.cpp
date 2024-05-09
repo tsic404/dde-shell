@@ -75,6 +75,7 @@ bool DockPanel::init()
     connect(SETTINGS, &DockSettings::hideModeChanged, this, &DockPanel::hideModeChanged);
     connect(SETTINGS, &DockSettings::itemAlignmentChanged, this, &DockPanel::itemAlignmentChanged);
     connect(SETTINGS, &DockSettings::indicatorStyleChanged, this, &DockPanel::indicatorStyleChanged);
+    connect(SETTINGS, &DockSettings::lockModeChanged, this, &DockPanel::lockModeChanged);
 
     connect(SETTINGS, &DockSettings::dockSizeChanged, this, [this, dockDaemonAdaptor](){
         Q_EMIT dockDaemonAdaptor->WindowSizeEfficientChanged(dockSize());
@@ -134,13 +135,13 @@ bool DockPanel::init()
     return true;
 }
 
-QRect DockPanel::geometry()
+QRect DockPanel::geometry() const
 {
     Q_ASSERT(window());
     return window()->geometry();
 }
 
-QRect DockPanel::frontendWindowRect()
+QRect DockPanel::frontendWindowRect() const
 {
     if(!window()) return QRect();
 
@@ -167,7 +168,7 @@ QRect DockPanel::frontendWindowRect()
     return QRect(x * ratio, y * ratio, geometry.width() * ratio, geometry.height() * ratio);
 }
 
-ColorTheme DockPanel::colorTheme()
+ColorTheme DockPanel::colorTheme() const
 {
     return m_theme;
 }
@@ -180,7 +181,7 @@ void DockPanel::setColorTheme(const ColorTheme& theme)
     Q_EMIT this->colorThemeChanged(theme);
 }
 
-uint DockPanel::dockSize()
+uint DockPanel::dockSize() const
 {
     return SETTINGS->dockSize();
 }
@@ -194,7 +195,7 @@ void DockPanel::setDockSize(const uint& size)
     SETTINGS->setDockSize(size);
 }
 
-HideMode DockPanel::hideMode()
+HideMode DockPanel::hideMode() const
 {
     return SETTINGS->hideMode();
 }
@@ -205,7 +206,7 @@ void DockPanel::setHideMode(const HideMode& mode)
     Q_EMIT hideStateChanged(hideState());
 }
 
-Position DockPanel::position()
+Position DockPanel::position() const
 {
     return SETTINGS->position();
 }
@@ -215,7 +216,7 @@ void DockPanel::setPosition(const Position& position)
     SETTINGS->setPosition(position);
 }
 
-ItemAlignment DockPanel::itemAlignment()
+ItemAlignment DockPanel::itemAlignment() const
 {
     return SETTINGS->itemAlignment();
 }
@@ -225,7 +226,7 @@ void DockPanel::setItemAlignment(const ItemAlignment& alignment)
     SETTINGS->setItemAlignment(alignment);
 }
 
-IndicatorStyle DockPanel::indicatorStyle()
+IndicatorStyle DockPanel::indicatorStyle() const
 {
     return SETTINGS->indicatorStyle();
 }
@@ -233,6 +234,16 @@ IndicatorStyle DockPanel::indicatorStyle()
 void DockPanel::setIndicatorStyle(const IndicatorStyle& style)
 {
     SETTINGS->setIndicatorStyle(style);
+}
+
+bool DockPanel::lockMode() const
+{
+    return SETTINGS->lockMode();
+}
+
+void DockPanel::setLockMode(bool lock)
+{
+    SETTINGS->setLockMode(lock);
 }
 
 void DockPanel::onWindowGeometryChanged()
@@ -256,7 +267,7 @@ void DockPanel::setCompositorReady(bool ready)
     Q_EMIT compositorReadyChanged();
 }
 
-HideState DockPanel::hideState()
+HideState DockPanel::hideState() const
 {
     if (hideMode() == KeepShowing)
         return Show;

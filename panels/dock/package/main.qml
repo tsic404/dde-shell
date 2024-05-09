@@ -221,6 +221,15 @@ Window {
             }
 
             LP.MenuItem {
+                visible: Applet.debugMode
+                text: qsTr("Lock Mode")
+                onTriggered: {
+                    Applet.lockMode = !Applet.lockMode
+                }
+                checked: Applet.lockMode
+            }
+
+            LP.MenuItem {
                 text: qsTr("Dock Settings")
                 onTriggered: {
                     Panel.openDockSettings()
@@ -351,6 +360,7 @@ Window {
         property int averageCount: 5
         hoverEnabled: true
         propagateComposedEvents: true
+        visible: !Applet.lockMode
 
         cursorShape: {
             if (Panel.position == Dock.Top || Panel.position == Dock.Bottom) {

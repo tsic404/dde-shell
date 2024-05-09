@@ -10,6 +10,7 @@
 #include <QObject>
 #include <DConfig>
 #include <QScopedPointer>
+#include <qtmetamacros.h>
 
 DCORE_USE_NAMESPACE
 
@@ -25,6 +26,7 @@ class DockSettings : public QObject
     Q_PROPERTY(ItemAlignment itemAlignment READ itemAlignment WRITE setItemAlignment NOTIFY itemAlignmentChanged FINAL)
     Q_PROPERTY(IndicatorStyle indicatorStyle READ indicatorStyle WRITE setIndicatorStyle NOTIFY indicatorStyleChanged FINAL)
     Q_PROPERTY(QVariantMap pluginsVisible READ pluginsVisible WRITE setPluginsVisible NOTIFY pluginsVisibleChanged FINAL)
+    Q_PROPERTY(bool lockMode READ lockMode WRITE setLockMode NOTIFY lockModeChanged FINAL)
 
 public:
     static DockSettings* instance();
@@ -35,6 +37,7 @@ public:
     ItemAlignment itemAlignment();
     IndicatorStyle indicatorStyle();
     QVariantMap pluginsVisible();
+    bool lockMode();
 
     void setDockSize(const uint& size);
     void setHideMode(const HideMode& mode);
@@ -42,6 +45,7 @@ public:
     void setItemAlignment(const ItemAlignment& alignment);
     void setIndicatorStyle(const IndicatorStyle& style);
     void setPluginsVisible(const QVariantMap & pluginsVisible);
+    void setLockMode(bool lockMode);
 
 private:
     enum WriteJob {
@@ -50,6 +54,7 @@ private:
         positionJob = 2,
         itemAlignmentJob = 3,
         indicatorStyleJob = 4,
+        lockModeJob = 5,
     };
 
     explicit DockSettings(QObject *parent = nullptr);
@@ -65,12 +70,14 @@ Q_SIGNALS:
     void itemAlignmentChanged(ItemAlignment alignment);
     void indicatorStyleChanged(IndicatorStyle style);
     void pluginsVisibleChanged(const QVariantMap &pluginsVisible);
+    void lockModeChanged(bool lockMode);
 
 private:
     QScopedPointer<DConfig> m_dockConfig;
     QTimer* m_writeTimer;
     QList<WriteJob> m_writeJob;
 
+    bool m_lock;
     uint m_dockSize;
     HideMode m_hideMode;
     Position m_dockPosition;
