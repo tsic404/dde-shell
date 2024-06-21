@@ -10,6 +10,7 @@
 #include <QtWaylandCompositor/QWaylandSurface>
 #include <QtWaylandCompositor/QWaylandResource>
 #include <cstdint>
+#include <qt5/QtCore/qpoint.h>
 
 #include "qwayland-server-plugin-manager-v1.h"
 
@@ -87,6 +88,7 @@ public:
     bool isItemActive() const;
 
     Q_INVOKABLE void updatePluginGeometry(const QRect &geometry);
+    Q_INVOKABLE void setGlobalPos(const QPoint &pos);
 
 signals:
     void itemActiveChanged();

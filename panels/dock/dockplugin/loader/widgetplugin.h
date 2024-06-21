@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "common.h"
 #include "pluginitem.h"
 #include "pluginsiteminterface_v2.h"
 
@@ -52,7 +51,6 @@ private:
 private:
     PluginsItemInterface* m_pluginsItemInterface;
     QScopedPointer<PluginItem> m_pluginItem;
-    QList<PluginItem*> m_pluginItems;
     QPluginLoader* m_pluginLoader;
 };
 

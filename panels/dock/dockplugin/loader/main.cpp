@@ -18,6 +18,7 @@
 
 #include <cstdlib>
 #include <DGuiApplicationHelper>
+#include <qglobal.h>
 #include <signal.h>
 
 DGUI_USE_NAMESPACE
@@ -59,6 +60,7 @@ int main(int argc, char *argv[], char *envp[])
     qputenv("DSG_APP_ID", "dde-dock");
     qputenv("WAYLAND_DISPLAY", "dockplugin");
     qputenv("QT_WAYLAND_SHELL_INTEGRATION", "plugin-shell");
+    qputenv("D_DXCB_DISABLE_OVERRIDE_HIDPI", "1");
 
     Dtk::Widget::DApplication app(argc, argv);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);

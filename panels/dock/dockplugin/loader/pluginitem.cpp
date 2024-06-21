@@ -172,7 +172,7 @@ void PluginItem::enterEvent(QEvent *event)
     QMetaObject::invokeMethod(this, [this](){
         auto toolTip = m_pluginsItemInterface->itemTipsWidget(m_itemKey);
         if (!toolTip) {
-            qDebug() << "no tooltip";
+            // qDebug() << "no tooltip";
             return;
         }
 

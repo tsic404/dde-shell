@@ -19,6 +19,7 @@ class Q_DECL_EXPORT EmbedPlugin : public QObject
     Q_PROPERTY(int pluginType READ pluginType WRITE setPluginType NOTIFY pluginTypeChanged)
     Q_PROPERTY(int pluginFlags READ pluginFlags WRITE setPluginFlags NOTIFY pluginFlagsChanged)
     Q_PROPERTY(uint32_t pluginSizePolicy READ pluginSizePolicy WRITE setPluginSizePolicy NOTIFY pluginSizePolicyChanged)
+    Q_PROPERTY(QPoint rawGlobalPos READ rawGlobalPos WRITE setRawGlobalPos NOTIFY rawGlobalPosChanged)
 
 public:
     enum PluginType {
@@ -45,6 +46,9 @@ public:
     int pluginSizePolicy() const;
     void setPluginSizePolicy(int sizePolicy);
 
+    QPoint rawGlobalPos() const;
+    void setRawGlobalPos(const QPoint& pos);
+
     static EmbedPlugin* get(QWindow* window);
     static bool contains(QWindow* window);
     static bool contains(const QString &itemKey, int type);
@@ -63,6 +67,7 @@ Q_SIGNALS:
     void pluginFlagsChanged();
     void pluginSizePolicyChanged();
     void requestMessage(const QString &msg);
+    void rawGlobalPosChanged();
 
 private:
     explicit EmbedPlugin(QWindow* window);

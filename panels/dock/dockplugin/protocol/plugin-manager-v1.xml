@@ -101,5 +101,9 @@
       <arg name="width" type="int"/>
       <arg name="height" type="int"/>
     </event>
+    <event name="rawGlobalPos">
+      <arg name="x" type="int"/>
+      <arg name="y" type="int"/>
+    </event>
   </interface>
 </protocol>

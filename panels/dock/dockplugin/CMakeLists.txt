@@ -4,3 +4,4 @@
 
 add_subdirectory(plugin)
 add_subdirectory(loader)
+add_subdirectory(application-tray)

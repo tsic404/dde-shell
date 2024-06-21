@@ -308,8 +308,8 @@ void DockPanel::loadDockPlugins()
     QProcess proc;
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     env.insert("QT_SCALE_FACTOR", QString::number(qApp->devicePixelRatio()));
+    env.insert("D_DXCB_DISABLE_OVERRIDE_HIDPI", "1");
     proc.setProcessEnvironment(env);
-    proc.setProgram(QString("%1/../panels/dock/dockplugin/loader/dockplugin-loader").arg(qApp->applicationDirPath()));
 #ifdef QT_DEBUG
     proc.setProgram(QString("%1/../panels/dock/dockplugin/loader/dockplugin-loader").arg(qApp->applicationDirPath()));
 #else

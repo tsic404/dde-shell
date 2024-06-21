@@ -54,7 +54,6 @@ void WidgetPlugin::itemAdded(PluginsItemInterface * const itemInter, const QStri
         plugin->setPluginSizePolicy(itemInter->pluginSizePolicy());
         item->windowHandle()->hide();
         item->show();
-        m_pluginItems << item;
     }
     if (flag & Dock::Type_Quick || flag & Dock::Type_Tool ||
         flag & Dock::Type_System || flag & Dock::Type_Tray || 
@@ -71,7 +70,6 @@ void WidgetPlugin::itemAdded(PluginsItemInterface * const itemInter, const QStri
             plugin->setPluginSizePolicy(itemInter->pluginSizePolicy());
             item->windowHandle()->hide();
             item->show();
-            m_pluginItems << item;
         }
     }
     if (flag & Dock::Type_Fixed) {
@@ -86,7 +84,6 @@ void WidgetPlugin::itemAdded(PluginsItemInterface * const itemInter, const QStri
         plugin->setPluginSizePolicy(itemInter->pluginSizePolicy());
         item->windowHandle()->hide();
         item->show();
-        m_pluginItems << item;
     }
 }
 
@@ -109,17 +106,18 @@ void WidgetPlugin::itemUpdate(PluginsItemInterface * const itemInter, const QStr
 }
 void WidgetPlugin::itemRemoved(PluginsItemInterface * const itemInter, const QString &itemKey)
 {
+    qDebug() << "itemRemoved:" << itemKey;
     auto widget = m_pluginsItemInterface->itemWidget(itemKey);
-    if(widget) widget->hide();
+    if(widget) widget->close();
 
     auto quickPanel = m_pluginsItemInterface->itemWidget(Dock::QUICK_ITEM_KEY);
-    if(quickPanel) quickPanel->hide();
+    if(quickPanel) quickPanel->close();
 
     auto popupWidget = m_pluginsItemInterface->itemPopupApplet(itemKey);
-    if(popupWidget) popupWidget->hide();
+    if(popupWidget) popupWidget->close();
 
     auto tipsWidget = m_pluginsItemInterface->itemTipsWidget(itemKey);
-    if(tipsWidget) tipsWidget->hide();
+    if(tipsWidget) tipsWidget->close();
 
 }
 

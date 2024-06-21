@@ -88,6 +88,23 @@ void PluginSurface::updatePluginGeometry(const QRect &geometry)
     send_geometry(geometry.x(), geometry.y(), geometry.width(), geometry.height());
 }
 
+void PluginSurface::setGlobalPos(const QPoint &pos)
+{
+    QRect g = qApp->primaryScreen() ? qApp->primaryScreen()->geometry() : QRect();
+    for (auto *screen : qApp->screens())
+    {
+        const QRect &sg = screen->geometry();
+        if (sg.contains(pos))
+        {
+            g = sg;
+            break;
+        }
+    }
+
+    auto p = g.topLeft() + (pos - g.topLeft()) * qApp->devicePixelRatio();
+    send_rawGlobalPos(p.x(), p.y());
+}
+
 PluginPopup::PluginPopup(PluginManager* manager, const QString &pluginId, const QString &itemKey, int x, int y, int popupType, QWaylandSurface *surface, const QWaylandResource &resource)
     : m_manager(manager)
     , m_surface(surface)
