@@ -166,13 +166,6 @@ Item {
             sourceSize: Qt.size(Dock.MAX_DOCK_TASKMANAGER_ICON_SIZE, Dock.MAX_DOCK_TASKMANAGER_ICON_SIZE)
             anchors.centerIn: parent
             scale: iconScale
-            BeatAnimation {
-                id: beatAnimation
-                target: icon
-                baseScale: iconScale
-                loops: Animation.Infinite
-                running: root.attention
-            }
 
             LaunchAnimation {
                 id: launchAnimation
@@ -204,19 +197,45 @@ Item {
                 loops: 1
                 running: false
             }
+        }
 
-            Connections {
-                target: Panel.rootObject
-                function onPressedAndDragging(isDragging) {
-                    if (isDragging) {
-                        beatAnimation.stop()
-                        icon.scale = Qt.binding(function() {
-                            return root.iconScale
-                        })
-                    } else {
-                        beatAnimation.running = Qt.binding(function() {
-                            return root.attention
-                        })
+        Repeater {
+            model: 4
+            Rectangle {
+                id: rect
+                visible: root.attention && !Panel.rootObject.isDragging
+                required property int index
+                property var originSize: 70 * iconScale
+                width: originSize * index
+                height: width
+                radius: width
+                border.width: 1
+                border.color: Qt.rgba(1, 1, 1, 0.1)
+                color: Qt.rgba(1, 1, 1, 0.4)
+
+                anchors.centerIn: parent
+                z: -1
+                opacity: 4 - width / originSize
+                ParallelAnimation {
+                    id: notificationAni
+                    running: root.attention && !Panel.rootObject.isDragging
+                    loops: Animation.Infinite
+
+                    SequentialAnimation {
+                        NumberAnimation { target: rect; property: "width"; from: originSize * index; to: originSize * (index + 1); duration: 1415 }
+                        NumberAnimation { target: rect; property: "width"; from: originSize * (index + 1); to: originSize * (index + 2); duration: 1415 }
+                    }
+
+                    SequentialAnimation {
+                        ColorAnimation { target: rect; property: "color"; from: Qt.rgba(1, 1, 1, 0.4); to: Qt.rgba(1, 1, 1, 0.1); duration: 720 }
+                        ColorAnimation { target: rect; property: "color"; from: Qt.rgba(1, 1, 1, 0.1); to: Qt.rgba(1, 1, 1, 0.1); duration: 280 }
+                        ColorAnimation { target: rect; property: "color"; from: Qt.rgba(1, 1, 1, 0.4); to: Qt.rgba(1, 1, 1, 0.1); duration: 720 }
+                        ColorAnimation { target: rect; property: "color"; from: Qt.rgba(1, 1, 1, 0.4); to: Qt.rgba(1, 1, 1, 0.1); duration: 720 }
+                    }
+
+                    BeatAnimation {
+                        target: icon
+                        baseScale: iconScale
                     }
                 }
             }
